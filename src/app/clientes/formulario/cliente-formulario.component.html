@@ -1,0 +1,56 @@
+<h1>Formulario registro de clientes</h1>
+<form action="" [formGroup]="formNewCliente" (ngSubmit)="onSubmit()">
+    <input type="hidden" class="form-control" formControlName="id">
+    <div class="form-group">
+        <label for="">Nombre</label>
+        <input type="text" class="form-control" formControlName="nombre">
+        <div class="error" *ngIf="formNewCliente.controls.nombre.errors && formNewCliente.controls.nombre.touched">
+            El campo nombre es requerido
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="">Apellido</label>
+        <input type="text" class="form-control" formControlName="apellido">
+        <div class="error" *ngIf="formNewCliente.controls.apellido.errors && formNewCliente.controls.apellido.touched">
+            El campo apellido es requerido
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="">email</label>
+        <input type="text" class="form-control" formControlName="email">
+        
+        <div class="error" *ngIf="formNewCliente.controls.email.errors && formNewCliente.controls.email.touched">
+            El campo email es requerido
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="">Tipo Cliente</label>
+        <input type="text" class="form-control" formControlName="tipo_cliente_id">
+        <ng-autocomplete
+            [data]="countries"
+            [searchKeyword]="keyword"
+            placeholder="Enter the Country Name"
+            (selected)='selectEvent($event)'
+            (inputChanged)='onChangeSearch($event)'
+            (inputFocused)='onFocused($event)'
+            historyIdentifier="countries"
+            [itemTemplate]="itemTemplate"
+            [notFoundTemplate]="notFoundTemplate">
+        </ng-autocomplete>
+
+        <ng-template #itemTemplate let-item>
+            <a [innerHTML]="item.name"></a>
+        </ng-template>
+
+        <ng-template #notFoundTemplate let-notFound>
+            <div [innerHTML]="notFound"></div>
+        </ng-template>
+        <div class="error" *ngIf="formNewCliente.controls.tipo_cliente_id.errors && formNewCliente.controls.tipo_cliente_id.touched">
+            El campo tipo cliente es requerido
+        </div>
+    </div>
+   <input type="submit" value="Enviar"  class="btn btn-success" [disabled]="!formNewCliente.valid" *ngIf="isShowCreate"/>
+   <button type="button" class="btn btn-warning"  (click)="onClickModificar()" *ngIf="isShowEdit" >Modificar</button>
+
+
+</form>

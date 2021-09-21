@@ -1,0 +1,75 @@
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalInsert">
+    <span class="fa fa-plus"></span>
+    Nuevo clientes
+  </button>
+
+<div class="container">
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th scope="col">id</th>
+        <th scope="col">nombres</th>
+        <th scope="col">email</th>
+        <th scope="col">tipo cliente</th>
+        <th scope="col">Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cliente of arrClientes; index as i" >
+        <th scope="row"> {{cliente.id}}</th>
+        <td>{{cliente.nombre}} {{cliente.apellido}}</td>
+        <td>{{cliente.email}}</td>
+        <td>{{ cliente.tipocliente.nombre }}</td>
+        <td>
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" (click)="onClickDetalle(cliente.id)">Detalle</button>
+            <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#myModalInsert" (click)="onClickModificar(cliente.id)">Modificar</button>
+            <button type="button" class="btn btn-danger btn-lg"  (click)="onClickEliminar(cliente.id)">Eliminar</button>
+
+        </td>
+      </tr>
+    </tbody>
+
+  </table>
+    
+
+    
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="#myModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="myModal"> {{id}} - {{nombre}} {{apellido}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5> Nombres: {{nombre}} {{apellido}} </h5>
+            <h6>Correo: {{email}}</h6>
+            <h6>Tipo de cliente: {{tipoClienteId}}</h6>
+            <h6>Creacion: {{createAt}}</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+     <!-- Insert Modal -->
+  <div class="modal fade" id="myModalInsert" tabindex="-1" role="dialog" aria-labelledby="#myModalInsert" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="myModalInsert">Detalles de Post</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <app-cliente-formulario></app-cliente-formulario>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
