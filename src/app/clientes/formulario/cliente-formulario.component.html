@@ -23,9 +23,15 @@
             El campo email es requerido
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group" >
         <label for="">Tipo Cliente</label>
-        <input type="text" class="form-control" formControlName="tipo_cliente_id">
+
+        <select formControlName="tipo_cliente_id" id="tipo_cliente_id" class="form-control">
+            <option *ngFor="let tipocliente of arrTipoClientes; let i = index" [value]="tipocliente.tipo_cliente_id">
+              {{tipocliente.nombre}}
+            </option>
+          </select>
+
         <ng-autocomplete
             [data]="countries"
             [searchKeyword]="keyword"

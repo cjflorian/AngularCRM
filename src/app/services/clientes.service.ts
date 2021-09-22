@@ -1,7 +1,8 @@
 import { Injectable,EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Clientes } from '../models/cliente.module';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import Swal from 'sweetalert2';
 @Injectable({
   providedIn: 'root'
 })
@@ -29,6 +30,7 @@ export class ClientesService {
     return this.httpClient.get<any[]>(this.baseUrl).toPromise();
   }
 
+  //observable
   getById(pId: number): Promise<any> { // UN UNICO OBJETO
     return this.httpClient.get<any>(`${this.baseUrl}/${pId}`).toPromise();
 
@@ -42,11 +44,13 @@ export class ClientesService {
   update(cliente: any): Promise<any[]>{
     const bodyRequest = cliente;
     const id = cliente.id;
-    return this.httpClient.put<any>(`${this.baseUrl}/${id}`, bodyRequest).toPromise();
+    const result = this.httpClient.put<any>(`${this.baseUrl}/${id}`, bodyRequest).toPromise();
+    return result;
   }
 
 
   delete(pId: number): Promise<any[]>{
+    debugger;
     return this.httpClient.delete<any>(`${this.baseUrl}/${pId}`).toPromise();
   }
 
@@ -58,3 +62,7 @@ export class ClientesService {
     this.invokeMyNewMethod.emit();
   }
 }
+function catchError(arg0: (e: any) => void): import("rxjs").OperatorFunction<Clientes, Clientes> {
+  throw new Error('Function not implemented.');
+}
+

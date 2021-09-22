@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ClientesService } from 'src/app/services/clientes.service';
 import Swal from 'sweetalert2';
 import {  Subscription } from 'rxjs';
+import { TipoclientesService } from 'src/app/services/tipoclientes.service';
 
 declare var $: any;
 
@@ -22,13 +23,17 @@ export class ClienteFormularioComponent implements OnInit {
   isShowCreate: boolean = true ; // hidden by default
   isShowEdit: boolean = false ; // hidden by default
   arrClientes: any[];
+  arrTipoClientes: any[];
+  
 
 
-  constructor(private clienteService: ClientesService, private router: Router, private fb: FormBuilder) { 
+  constructor(private clienteService: ClientesService, private tipoclienteService: TipoclientesService) { 
     this.arrClientes = [];
+    this.arrTipoClientes = [];
     this.isShowCreate = true;
     this.isShowEdit = false;
-    this.formNewCliente = new FormGroup({
+    
+    this.formNewCliente =  new FormGroup({
       id: new FormControl(''),
       nombre: new FormControl('',[
         Validators.required
@@ -43,6 +48,7 @@ export class ClienteFormularioComponent implements OnInit {
         Validators.required
       ])
     });
+    
   }
 
 
@@ -51,6 +57,10 @@ export class ClienteFormularioComponent implements OnInit {
       console.log(res);
       this.methodToBeCalled(res);
     });
+    
+    this.tipoclienteService.getAll()
+    .then(clientes => this.arrTipoClientes = clientes)
+    .catch(error => console.log(console.error(error)));
   }
 
   async methodToBeCalled(id:any){
@@ -59,6 +69,7 @@ export class ClienteFormularioComponent implements OnInit {
     this.isShowEdit = true;
     try{
       const cliente = await this.clienteService.getById(id);
+      
       this.formNewCliente = new FormGroup({
         id: new FormControl(cliente.id,[
           Validators.required
@@ -66,9 +77,7 @@ export class ClienteFormularioComponent implements OnInit {
         nombre: new FormControl(cliente.nombre,[
           Validators.required
         ]),
-        apellido: new FormControl(cliente.apellido,[
-          Validators.required
-        ]),
+        apellido: new FormControl(cliente.apellido),
         email: new FormControl(cliente.email,[
           Validators.required
         ]),
@@ -76,6 +85,7 @@ export class ClienteFormularioComponent implements OnInit {
           Validators.required
         ])
       });
+     console.log(cliente);
         }
     catch(error){
       console.log(error);
@@ -85,13 +95,21 @@ export class ClienteFormularioComponent implements OnInit {
   
   onSubmit(){
     console.log(this.formNewCliente.value);
-    this.clienteService.create(this.formNewCliente.value);
-    Swal.fire('Cliente Creado con exito','Cliente');
-    $('#myModalInsert').modal('hide');
+    this.clienteService.create(this.formNewCliente.value).then(function(res:any){
+      Swal.fire('Creado con exito','Dato', 'success');
+    })
+    .catch(error => {
+      console.log(error);
+      Swal.fire('Error: '+error.error.mensaje,error.error.error, 'error');
+    });
     this.clienteService.callMyNewMethod();
+    this.formNewCliente.reset();
+    $('#myModalInsert').modal('hide');
   }
 
   keyword = 'name';
+  
+ 
   public countries = [
     {
       id: 1,
@@ -158,9 +176,17 @@ export class ClienteFormularioComponent implements OnInit {
 
   onClickModificar(){
     console.log(this.formNewCliente.value);
-    this.clienteService.update(this.formNewCliente.value);
+    this.clienteService.update(this.formNewCliente.value).then(function(res:any){
+      Swal.fire('Modificado con exito','Dato', 'success');
+    })
+    .catch(error => {
+      console.log(error);
+      Swal.fire('Error: '+error.error.mensaje,error.error.error, 'error');
+    });
+    this.clienteService.callMyNewMethod();
+    this.formNewCliente.reset();
     $('#myModalInsert').modal('hide');
-    Swal.fire('Cliente Modificado con exito','Cliente');
+    
     
   }
 
