@@ -27,7 +27,7 @@ export class ClienteFormularioComponent implements OnInit {
   
 
 
-  constructor(private clienteService: ClientesService, private tipoclienteService: TipoclientesService) { 
+  constructor(private clienteService: ClientesService, private tipoclienteService: TipoclientesService, private router: Router) { 
     this.arrClientes = [];
     this.arrTipoClientes = [];
     this.isShowCreate = true;
@@ -93,18 +93,20 @@ export class ClienteFormularioComponent implements OnInit {
     }
 
   
-  onSubmit(){
+  public onSubmit(): void{
     console.log(this.formNewCliente.value);
     this.clienteService.create(this.formNewCliente.value).then(function(res:any){
       Swal.fire('Creado con exito','Dato', 'success');
+      
     })
     .catch(error => {
       console.log(error);
       Swal.fire('Error: '+error.error.mensaje,error.error.error, 'error');
     });
     this.clienteService.callMyNewMethod();
-    this.formNewCliente.reset();
-    $('#myModalInsert').modal('hide');
+    //this.formNewCliente.reset();
+    //$('#myModalInsert').modal('hide');
+    this.router.navigate(['/clientes']);
   }
 
   keyword = 'name';

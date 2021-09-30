@@ -40,8 +40,8 @@ export class ClienteComponent implements OnInit {
     this.clienteService.currentMessage.subscribe(message => this.message = message);
   }
 
-  ngOnInit(): void {
-    this.ngLoad();
+  async ngOnInit(){
+    await this.ngLoad();
 
     this.myNewMethodSubs = this.clienteService.invokeMyNewMethod.subscribe(res => {
       this.ngLoad();
@@ -49,8 +49,8 @@ export class ClienteComponent implements OnInit {
     
   }
 
-  ngLoad(): void {
-    this.clienteService.getAll()
+  async ngLoad() {
+    await this.clienteService.getAll()
     .then(clientes => this.arrClientes = clientes)
     .catch(error => console.log(console.error(error)));
   }

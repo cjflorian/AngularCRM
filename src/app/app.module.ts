@@ -11,13 +11,15 @@ import { AppComponent } from './app.component';
 import { ClienteFormularioComponent } from './clientes/formulario/cliente-formulario.component';
 import { ClienteComponent } from './clientes/cliente.component';
 import { LoginComponent } from './login/login.component';
+import { PersonajesComponent } from './personajes/personajes.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ClienteFormularioComponent,
     ClienteComponent,
-    LoginComponent
+    LoginComponent,
+    PersonajesComponent
   ],
   imports: [
     BrowserModule,
