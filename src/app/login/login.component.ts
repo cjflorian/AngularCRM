@@ -27,14 +27,27 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    alert("HOLA");
+    let session = localStorage.getItem('user');
+    console.log(session);
+    if(session!==null)
+    {
+      let datos =  JSON.parse(session);
+      alert('logeado como '+ datos.username)
+    }
+    else
+      alert('bienvenido logueate')
   }
 
   onClickIngresar(): void{
     console.log(this.formNewLogin.value);
+    let username = this.formNewLogin.value.username;
+    Swal.showLoading();
     this.loginService.login(this.formNewLogin.value).then(function(res:any){
       console.log(res);
+      Swal.hideLoading();
       Swal.fire('Login Exitoso','Dato', 'success');
+      localStorage.setItem('user', JSON.stringify({ token: res.token, username: username}));
+
       
     })
     .catch(error => {

@@ -4,9 +4,12 @@ import { ClienteComponent } from './clientes/cliente.component';
 import { ClienteFormularioComponent } from './clientes/formulario/cliente-formulario.component';
 import { LoginComponent } from './login/login.component';
 import { PersonajesComponent } from './personajes/personajes.component';
+import { PrincipalComponent } from './principal/principal.component';
+
 
 const routes: Routes = [
-  {path: '', pathMatch: 'full', redirectTo: '/login'},
+  {path: '', pathMatch: 'full', redirectTo: '/principal'},
+  {path: 'principal', component:PrincipalComponent},
   {path: 'login', component:LoginComponent},
   {path: 'clientes', component:ClienteComponent},
   {path: 'clientesformulario', component:ClienteFormularioComponent},
@@ -18,4 +21,17 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule { 
+  isLogin: boolean = false; // hidden by default
+  
+  ngOnInit(): void {
+    let session = localStorage.getItem('user');
+    console.log("comp"+session);
+    if(session!==null)
+    {
+      this.isLogin==true 
+    }
+    else
+    this.isLogin==false 
+    }
+}
