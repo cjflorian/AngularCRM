@@ -16,16 +16,14 @@ export class PrincipalComponent implements OnInit {
   ngOnInit(): void {
     let session = localStorage.getItem('user');
     console.log("comp"+session);
-    if(session!==null)
-    {
-      this.isLogin==true 
-
-    }
-    else
-    {
-      this.isLogin==false 
-      this.router.navigate(['login']);
-    }
-    
+      if(session!==null)
+      {
+        this.isLogin==true 
+      }
+      else
+      {
+        this.isLogin==false 
+        this.router.navigate(['login']);
+      }    
     }
 }

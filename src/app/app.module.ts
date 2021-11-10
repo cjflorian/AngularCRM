@@ -13,6 +13,7 @@ import { ClienteComponent } from './clientes/cliente.component';
 import { LoginComponent } from './login/login.component';
 import { PersonajesComponent } from './personajes/personajes.component';
 import { PrincipalComponent } from './principal/principal.component';
+import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { PrincipalComponent } from './principal/principal.component';
     ClienteComponent,
     LoginComponent,
     PersonajesComponent,
-    PrincipalComponent
+    PrincipalComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,
