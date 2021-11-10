@@ -4,6 +4,7 @@ import { ClientesService } from '../services/clientes.service';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClienteFormularioComponent } from './formulario/cliente-formulario.component';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cliente',
@@ -24,8 +25,9 @@ export class ClienteComponent implements OnInit {
   @Input () tipoClienteId: number;
   @Input () nombreCliente: string;
   myNewMethodSubs: Subscription = new Subscription;
+  isLogin: boolean = false; // hidden by default
 
-  constructor(private clienteService: ClientesService, private modalService: NgbModal) { 
+  constructor(private clienteService: ClientesService, private modalService: NgbModal,  private router: Router) { 
     this.arrClientes = [];
     this.cliente = [];
     this.id = 0;
@@ -41,17 +43,32 @@ export class ClienteComponent implements OnInit {
   }
 
   async ngOnInit(){
-    await this.ngLoad();
 
-    this.myNewMethodSubs = this.clienteService.invokeMyNewMethod.subscribe(res => {
-      this.ngLoad();
-    });
+    let session = localStorage.getItem('user');
+    console.log("comp"+session);
+      if(session!==null)
+      {
+        this.isLogin==true;
+        await this.ngLoad();
+
+        this.myNewMethodSubs = this.clienteService.invokeMyNewMethod.subscribe(res => {
+          this.ngLoad();
+        });
+      }
+      else
+      {
+        this.isLogin==false 
+        this.router.navigate(['login']);
+      } 
     
   }
 
   async ngLoad() {
     await this.clienteService.getAll()
-    .then(clientes => this.arrClientes = clientes)
+    .then(clientes => {
+      console.log(clientes);
+      this.arrClientes = clientes
+    })
     .catch(error => console.log(console.error(error)));
   }
 

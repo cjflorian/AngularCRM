@@ -11,7 +11,9 @@ import { LoginService } from '../services/login.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  formNewLogin: FormGroup;
+  formNewLogin: FormGroup;  
+  isLogin: boolean = false; // hidden by default
+
 
   constructor(private loginService: LoginService, private router: Router) { 
     
@@ -33,35 +35,31 @@ export class LoginComponent implements OnInit {
     if(session!==null)
     {
       let datos =  JSON.parse(session);
-      alert('logeado como '+ datos.username)
       this.router.navigate(['/principal']);
     }
-    else
-      alert('bienvenido logueate')
+    else{
+      
+    }
+   
   }
 
-  onClickIngresar(): void{
-    console.log(this.formNewLogin.value);
+  async onClickIngresar(){
+    //console.log(this.formNewLogin.value);
     let username = this.formNewLogin.value.username;
     let login = false;
     Swal.showLoading();
-    this.loginService.login(this.formNewLogin.value).then(function(res:any){
+    this.loginService.login(this.formNewLogin.value).then((res:any) =>{
       console.log(res);
       Swal.hideLoading();
       Swal.fire('Login Exitoso','Dato', 'success');
       localStorage.setItem('user', JSON.stringify({ token: res.token, username: username}));
       login = true;
+    this.router.navigateByUrl('/principal');
+    console.log('redireccionar');
     })
     .catch(error => {
       console.log(error);
       Swal.fire('Error: '+error.error.mensaje,error.error.error, 'error');
-    });
-    if(login){
-      this.router.navigate(['principal']);
+    });  
     }
-
-          
-  }
-
-
 }

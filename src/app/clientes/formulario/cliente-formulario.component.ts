@@ -5,6 +5,7 @@ import { ClientesService } from 'src/app/services/clientes.service';
 import Swal from 'sweetalert2';
 import {  Subscription } from 'rxjs';
 import { TipoclientesService } from 'src/app/services/tipoclientes.service';
+import { HttpHeaders } from '@angular/common/http';
 
 declare var $: any;
 
@@ -24,7 +25,7 @@ export class ClienteFormularioComponent implements OnInit {
   isShowEdit: boolean = false ; // hidden by default
   arrClientes: any[];
   arrTipoClientes: any[];
-  
+  isLogin: boolean = false; // hidden by default
 
 
   constructor(private clienteService: ClientesService, private tipoclienteService: TipoclientesService, private router: Router) { 
@@ -53,14 +54,27 @@ export class ClienteFormularioComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.myMethodSubs = this.clienteService.invokeMyMethod.subscribe(res => {
-      console.log(res);
-      this.methodToBeCalled(res);
-    });
-    
-    this.tipoclienteService.getAll()
-    .then(clientes => this.arrTipoClientes = clientes)
-    .catch(error => console.log(console.error(error)));
+    let session = localStorage.getItem('user');
+    //console.log(session);
+      if(session!==null)
+      {
+        this.isLogin==true;
+        this.myMethodSubs = this.clienteService.invokeMyMethod.subscribe(res => {
+          console.log(res);
+          this.methodToBeCalled(res);
+        });
+        
+        this.tipoclienteService.getAll()
+        .then(clientes => this.arrTipoClientes = clientes)
+        .catch(error => console.log(console.error(error)));
+      }
+      else
+      {
+        this.isLogin==false 
+        this.router.navigate(['login']);
+      } 
+
+   
   }
 
   async methodToBeCalled(id:any){
@@ -94,7 +108,8 @@ export class ClienteFormularioComponent implements OnInit {
 
   
   public onSubmit(): void{
-    console.log(this.formNewCliente.value);
+    
+
     this.clienteService.create(this.formNewCliente.value).then(function(res:any){
       Swal.fire('Creado con exito','Dato', 'success');
       

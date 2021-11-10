@@ -1,5 +1,5 @@
 import { Injectable,EventEmitter } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Clientes } from '../models/cliente.module';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -36,22 +36,46 @@ export class ClientesService {
 
   }
 
+
   create(cliente: any): Promise<any[]>{
     const bodyRequest = cliente;
-    return this.httpClient.post<any>(this.baseUrl, bodyRequest).toPromise();
+    let session:any = localStorage.getItem('user');
+    let token = JSON.parse(session);
+    let tokenFormat = 'Bearer '+token["token"]
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization':tokenFormat
+      })
+    }
+    return this.httpClient.post<any>(this.baseUrl, bodyRequest, httpOptions).toPromise();
   }
 
   update(cliente: any): Promise<any[]>{
     const bodyRequest = cliente;
+    let session:any = localStorage.getItem('user');
+    let token = JSON.parse(session);
+    let tokenFormat = 'Bearer '+token["token"]
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization':tokenFormat
+      })
+    }
     const id = cliente.id;
-    const result = this.httpClient.put<any>(`${this.baseUrl}/${id}`, bodyRequest).toPromise();
+    const result = this.httpClient.put<any>(`${this.baseUrl}/${id}`, bodyRequest,  httpOptions).toPromise();
     return result;
   }
 
 
   delete(pId: number): Promise<any[]>{
-    debugger;
-    return this.httpClient.delete<any>(`${this.baseUrl}/${pId}`).toPromise();
+    let session:any = localStorage.getItem('user');
+    let token = JSON.parse(session);
+    let tokenFormat = 'Bearer '+token["token"]
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization':tokenFormat
+      })
+    }
+    return this.httpClient.delete<any>(`${this.baseUrl}/${pId}`,  httpOptions).toPromise();
   }
 
   callMyMethod(params: any) {

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Router, RouterModule, Routes } from '@angular/router';
 import { ClienteComponent } from './clientes/cliente.component';
 import { ClienteFormularioComponent } from './clientes/formulario/cliente-formulario.component';
 import { LoginComponent } from './login/login.component';
@@ -25,15 +25,26 @@ const routes: Routes = [
 })
 export class AppRoutingModule { 
   isLogin: boolean = false; // hidden by default
+
+  public constructor(private router: Router){
+    
+  }
   
   ngOnInit(): void {
+    
     let session = localStorage.getItem('user');
-    console.log("comp"+session);
+    console.log(session);
     if(session!==null)
     {
-      this.isLogin==true 
+      let datos =  JSON.parse(session);
+      alert('ROUTING logeado como '+ datos.username)
+      this.router.navigate(['/principal']);
     }
-    else
-    this.isLogin==false 
+    else{
+      
     }
+    //Swal.hideLoading();
+    //Swal.fire('Login Exitoso','Dato', 'success');
+  }
+  
 }
